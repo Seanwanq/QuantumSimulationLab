@@ -1,0 +1,30 @@
+[project]
+name = "quantumsimulationlab"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Sean", email = "seanwang313@outlook.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.2.3",
+    "pandas>=2.2.3",
+    "scipy>=1.15.2",
+    "quantumsimulationlab",
+    "moviepy>=2.1.2",
+    "qutip>=5.1.1",
+    "tqdm>=4.67.1",
+    "matplotlib>=3.10.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "ipympl>=0.9.6",
+    "ipynb>=0.5.1",
+]
