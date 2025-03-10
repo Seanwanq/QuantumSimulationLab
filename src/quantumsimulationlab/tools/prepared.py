@@ -15,10 +15,10 @@ def origin(t: float = 0):
 
 def time_dependent_cat_state(hilbert_dimension: int, alpha, t: float):
     coherent_plus = np.kron(
-        basis(2, 0), coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.UP)
+        basis(2, 0), coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.PLUS)
     )
     coherent_minus = np.kron(
-        basis(2, 1), coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.DOWN)
+        basis(2, 1), coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.MINUS)
     )
     cat_state = coherent_plus + coherent_minus
     return cat_state / np.linalg.norm(cat_state)
@@ -26,7 +26,7 @@ def time_dependent_cat_state(hilbert_dimension: int, alpha, t: float):
 
 def prepared_initial(hilbert_dimension: int, alpha):
     spin_down = basis(2, 1)
-    vacuum = coherent(hilbert_dimension, alpha, 0, CoherentOrientationEnum.UP)
+    vacuum = coherent(hilbert_dimension, alpha, 0, CoherentOrientationEnum.PLUS)
     initial = np.kron(spin_down, vacuum)
     hadamard = pauli[PauliEnum.HADAMARD]
     identity = pauli[PauliEnum.IDENTITY]

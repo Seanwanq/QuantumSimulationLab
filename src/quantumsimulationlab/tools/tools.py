@@ -23,14 +23,14 @@ def basis(space_size: int, selected_dimension: int):
 def coherent(hilbert_dimension: int, alpha, t: float, orientation):
     state = np.zeros((hilbert_dimension, 1), dtype=complex)
     match orientation:
-        case CoherentOrientationEnum.UP:
+        case CoherentOrientationEnum.PLUS:
             for n in range(hilbert_dimension):
                 state[n] = (alpha(t) ** n / np.sqrt(factorial(n))) * np.exp(
                     -(abs(alpha(t)) ** 2) / 2
                 )
             return state / np.linalg.norm(state)
 
-        case CoherentOrientationEnum.DOWN:
+        case CoherentOrientationEnum.MINUS:
             for n in range(hilbert_dimension):
                 state[n] = ((-alpha(t)) ** n / np.sqrt(factorial(n))) * np.exp(
                     -(abs(-alpha(t)) ** 2) / 2
