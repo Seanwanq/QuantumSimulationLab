@@ -30,7 +30,7 @@ class TimeDependentStateEvolution:
         gate_frequency=0.0,
         kappa=0.0,
         custom_hamiltonian=None,
-        custom_alpha=None,
+        custom_initial=None,
         hilbert_dimension=100,
         with_phase: bool = False,
     ):
@@ -50,7 +50,7 @@ class TimeDependentStateEvolution:
         self.with_phase: bool = with_phase
         self.prepared_hamiltonian_index = prepared_hamiltonian_index
         self.custom_hamiltonian = custom_hamiltonian
-        self.custom_alpha = custom_alpha
+        self.custom_initial = custom_initial
 
     def _lindblad_dissipator(self, t, density_matrix):
         identity = np.eye(2, dtype=complex)
@@ -92,9 +92,9 @@ class TimeDependentStateEvolution:
         current_gate_index = 0
 
         times = np.linspace(0, self.time_total, self.time_steps)
-        if self.custom_alpha is not None:
+        if self.custom_initial is not None:
             density_matrix_initial = density_matrix(
-                prepared_initial(self.hilbert_dimension, self.custom_alpha)
+                self.custom_initial(self.hilbert_dimension)
             )
         else:
             density_matrix_initial = density_matrix(
