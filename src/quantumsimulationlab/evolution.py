@@ -1,16 +1,18 @@
-from quantumsimulationlab.tools import (
-    annihilation,
-    basis,
-    gate_application,
-    density_matrix,
-)
-from quantumsimulationlab.prepared import (
-    pre_hamiltonian,
+from quantumsimulationlab.tools.pauli import pauli
+from quantumsimulationlab.tools.prepared import (
     prepared_initial,
-    alpha,
+    origin,
+    pre_hamiltonian,
     time_dependent_cat_state,
 )
-from quantumsimulationlab.enums.gate_type_enum import GateTypeEnum
+from quantumsimulationlab.tools.tools import (
+    basis,
+    gate_application,
+    annihilation,
+    density_matrix,
+)
+
+from quantumsimulationlab.enums import GateTypeEnum
 
 import numpy as np
 from tqdm import tqdm
@@ -25,9 +27,10 @@ class TimeDependentStateEvolution:
         omega_r,
         gamma_t,
         prepared_hamiltonian_index,
-        gate_frequency=0,
-        kappa=0,
+        gate_frequency=0.0,
+        kappa=0.0,
         custom_hamiltonian=None,
+        custom_alpha=None,
         hilbert_dimension=100,
         with_phase: bool = False,
     ):
@@ -47,6 +50,7 @@ class TimeDependentStateEvolution:
         self.with_phase: bool = with_phase
         self.prepared_hamiltonian_index = prepared_hamiltonian_index
         self.custom_hamiltonian = custom_hamiltonian
+        self.custom_alpha = custom_alpha
 
     def _lindblad_dissipator(self, t, density_matrix):
         identity = np.eye(2, dtype=complex)
@@ -88,9 +92,14 @@ class TimeDependentStateEvolution:
         current_gate_index = 0
 
         times = np.linspace(0, self.time_total, self.time_steps)
-        density_matrix_initial = density_matrix(
-            prepared_initial(self.hilbert_dimension, alpha)
-        )
+        if self.custom_alpha is not None:
+            density_matrix_initial = density_matrix(
+                prepared_initial(self.hilbert_dimension, self.custom_alpha)
+            )
+        else:
+            density_matrix_initial = density_matrix(
+                prepared_initial(self.hilbert_dimension, origin)
+            )
         # density_matrix_initial = density_matrix(time_dependent_cat_state(self.hilbert_dimension, alpha, 0))
         dt = self.dt
         density_matrix_history = [density_matrix_initial.copy()]

@@ -1,6 +1,6 @@
 import numpy as np
 
-from quantumsimulationlab.enums.pauli_enum import PauliEnum
+from quantumsimulationlab.enums import PauliEnum
 
 def identity():
     return np.array([[1, 0], [0, 1]], dtype=complex)

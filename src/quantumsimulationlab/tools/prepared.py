@@ -1,15 +1,15 @@
 import numpy as np
 
-from quantumsimulationlab.tools import basis, coherent
+from quantumsimulationlab.tools.tools import basis, coherent
+from quantumsimulationlab.tools.pauli import pauli
 from quantumsimulationlab.enums import (
     PreparedHamiltonianEnum,
     PauliEnum,
     CoherentOrientationEnum,
 )
-from quantumsimulationlab.pauli import pauli
 
 
-def alpha(t: float = 0):
+def origin(t: float = 0):
     return np.complex128(0.0 + 0.0j)
 
 

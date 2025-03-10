@@ -1,10 +1,8 @@
 import numpy as np
 from scipy.special import factorial
 
-from quantumsimulationlab.enums.coherent_orientation_enum import CoherentOrientationEnum
-from quantumsimulationlab.enums.gate_type_enum import GateTypeEnum
-from quantumsimulationlab.enums.pauli_enum import PauliEnum
-from quantumsimulationlab.pauli import pauli
+from quantumsimulationlab.enums import CoherentOrientationEnum, GateTypeEnum, PauliEnum
+from quantumsimulationlab.tools.pauli import pauli
 
 
 def annihilation(hilbert_dimension: int):
@@ -63,6 +61,3 @@ def gate_application(hilbert_dimension: int, density_matrix, gate_type):
             raise ValueError("Invalid gate type. Choose 'H', 'I', or 'Z'.")
     full_gate = np.kron(gate, np.eye(hilbert_dimension))
     return full_gate @ density_matrix @ full_gate.conjugate().transpose()
-
-def greet(name: str, age: int) -> None:
-    print(f"Hello {name}, you are {age} years old.")
