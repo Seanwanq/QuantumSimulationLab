@@ -18,7 +18,8 @@ def time_dependent_cat_state(hilbert_dimension: int, alpha, t: float):
         basis(2, 0), coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.PLUS)
     )
     coherent_minus = np.kron(
-        basis(2, 1), coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.MINUS)
+        basis(2, 1),
+        coherent(hilbert_dimension, alpha, t, CoherentOrientationEnum.MINUS),
     )
     cat_state = coherent_plus + coherent_minus
     return cat_state / np.linalg.norm(cat_state)
