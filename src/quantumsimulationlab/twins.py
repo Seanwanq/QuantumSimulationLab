@@ -187,9 +187,9 @@ class Twins:
                     [photon_lists[0], photon_lists[1], photon_theoretical],
                     linestyles={2: "-."},
                     labels={
-                        0: r"$|0\rangle$",
-                        1: r"$|1\rangle$",
-                        2: r"theory",
+                        0: "|0>",
+                        1: "|1>",
+                        2: "theory",
                     },
                     type=self.coupling_type,
                     epsilon=self.epsilon,
@@ -236,8 +236,8 @@ class Twins:
                         ],
                         linestyles={2: "-.", 3: "-."},
                         labels={
-                            0: r"$|0\rangle$",
-                            1: r"$|1\rangle$",
+                            0: "|0>",
+                            1: "|1>",
                             2: "theory",
                             3: "theory fixed",
                         },
@@ -252,8 +252,8 @@ class Twins:
                     qp.plot_photon_data_list(
                         [photon_lists[0], photon_lists[1]],
                         labels={
-                            0: r"$|0\rangle$",
-                            1: r"$|1\rangle$",
+                            0: "|0>",
+                            1: "|1>",
                         },
                         type=self.coupling_type,
                         epsilon=self.epsilon,
@@ -295,9 +295,9 @@ class Twins:
                     [photon_lists[0], photon_lists[1], photon_theoretical],
                     linestyles={2: "-."},
                     labels={
-                        0: r"$|0\rangle$",
-                        1: r"$|1\rangle$",
-                        2: r"theory",
+                        0: "|0>",
+                        1: "|1>",
+                        2: "theory",
                     },
                     type=self.coupling_type,
                     epsilon=self.epsilon,

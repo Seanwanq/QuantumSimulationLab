@@ -255,7 +255,7 @@ class WignerAnalyzer:
             title += f", A = {A:.2f} MHz"
         fig, ax = plt.subplots(figsize=figsize)
         ax.plot(times, overlaps, marker="o", linestyle="-", color="blue")
-        ax.set_xlabel(r"Time ($\mu s$)")
+        ax.set_xlabel("Time (μs)")
         ax.set_ylabel("Overlap")
         ax.set_title(title)
         if save_path:
@@ -284,7 +284,7 @@ class WignerAnalyzer:
             title += f", A = {A:.2f} MHz"
         fig, ax = plt.subplots(figsize=figsize)
         ax.plot(times, fidelities, marker="o", linestyle="-", color="yellow")
-        ax.set_xlabel(r"Time ($\mu s$)")
+        ax.set_xlabel("Time (μs)")
         ax.set_ylabel("Fidelity")
         ax.set_title(title)
         if save_path:
@@ -313,7 +313,7 @@ class WignerAnalyzer:
             title += f", A = {A:.2f} MHz"
         fig, ax = plt.subplots(figsize=figsize)
         ax.plot(times, separabilities, marker="o", linestyle="-", color="green")
-        ax.set_xlabel(r"Time ($\mu s$)")
+        ax.set_xlabel("Time (μs)")
         ax.set_ylabel("Separability Metric")
         ax.set_title(title)
         if save_path:
@@ -336,9 +336,9 @@ class WignerAnalyzer:
             cmap="seismic",
         )
 
-        ax.set_xlabel(r"$x$")
-        ax.set_ylabel(r"$y$")
-        ax.set_title(rf"Wigner Function at t = {time:.2f} $\mu s$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_title(rf"Wigner Function at t = {time:.2f} μs")
         plt.colorbar(contour, ax=ax)
 
         if save_path:
@@ -360,9 +360,9 @@ class WignerAnalyzer:
             cmap="seismic",
         )
 
-        ax.set_xlabel(r"$x$")
-        ax.set_ylabel(r"$y$")
-        ax.set_title(rf"Wigner Functions at t = {time:.2f} $\mu s$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_title(rf"Wigner Functions at t = {time:.2f} μs")
         # ax.legend()
         plt.colorbar(contour, ax=ax)
 
@@ -384,8 +384,8 @@ class WignerAnalyzer:
         show=True,
     ):
         fig, ax = plt.subplots(figsize=figsize)
-        ax.set_xlabel(r"$x$")
-        ax.set_ylabel(r"$y$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
 
         title = "Peak Trace Plot"
 
@@ -438,8 +438,8 @@ class WignerAnalyzer:
     ):
         fig, ax = plt.subplots(figsize=figsize)
 
-        ax.set_xlabel(r"$x$")
-        ax.set_ylabel(r"$y$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
 
         title = "Wigner Functions with Peak Trace"
 

@@ -58,7 +58,7 @@ def plot_photon_data_list(
     show=True
 ):
     fig, ax = plt.subplots(figsize=figsize)
-    ax.set_xlabel(r"Time ($\mu s$)")
+    ax.set_xlabel("Time (μs)")
     ax.set_ylabel("Average Photon Number")
 
     title = ""
@@ -107,9 +107,9 @@ def plot_photon_data_list(
             eq_time = find_equilibrium_time(photon_list)
 
             if labels and i in labels:
-                label = labels[i] + rf" eq: {eq_time:.1f}$\mu s$"
+                label = labels[i] + f" eq: {eq_time:.1f} μs" if eq_time is not None else labels[i] + " eq: N/A"
             else:
-                label = rf"eq: {eq_time:.1f}$\mu s$"
+                label = f"eq: {eq_time:.1f} μs"
 
             # equilibrium_time_list.append(eq_time)
             color = colors[i % len(colors)]
@@ -137,9 +137,9 @@ def plot_equilibrium_times_epsilon(
     equilibrium_time_list, epsilon_list, save_path=None, figsize=(10, 8), show=True
 ):
     fig, ax = plt.subplots(figsize=figsize)
-    ax.set_xlabel(r"Epsilon ($\epsilon$ MHz)")
-    ax.set_ylabel(r"Equilibrium Time ($\mu s$)")
-    ax.set_title("Equilibrium Time vs Epsilon")
+    ax.set_xlabel("ε (MHz)")
+    ax.set_ylabel("Equilibrium Time (μs)")
+    ax.set_title("Equilibrium Time vs ε")
 
     ax.plot(
         epsilon_list, equilibrium_time_list, marker="o", linestyle="-", color="blue"
@@ -156,8 +156,8 @@ def plot_equilibrium_times_vs_A(
     equilibrium_time_list, A_list, save_path=None, figsize=(10, 8), show=True
 ):
     fig, ax = plt.subplots(figsize=figsize)
-    ax.set_xlabel(r"Amp ($A$ MHz)")
-    ax.set_ylabel(r"Equilibrium Time ($\mu s$)")
+    ax.set_xlabel("A (MHz)")
+    ax.set_ylabel("Equilibrium Time (μs)")
     ax.set_title("Equilibrium Time vs Amp")
 
     ax.plot(A_list, equilibrium_time_list, marker="o", linestyle="-", color="green")

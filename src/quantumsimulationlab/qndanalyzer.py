@@ -136,7 +136,7 @@ class QNDAnalyzer:
         A=None,
         show=True
     ):
-        title = "QND Fidelity" + r" $|$" + str(self.initial_state) + r"$\rangle$"
+        title = "QND Fidelity" + " |" + str(self.initial_state) + ">"
         if coupling_type is not None:
             title += f", {coupling_type}"
         if epsilon is not None:
@@ -146,7 +146,7 @@ class QNDAnalyzer:
         fig, ax = plt.subplots(figsize=figsize)
         ax.set_title(title)
         ax.plot(results["times"], results["fidelities"], label="Fidelity")
-        ax.set_xlabel(r"Time ($\mu s$)")
+        ax.set_xlabel("Time (μs)")
         ax.set_ylabel("Fidelity")
         ax.set_ylim(0.99, 1.01)
         ax.legend()
@@ -167,7 +167,7 @@ class QNDAnalyzer:
         ylim_up=None,
         show=True
     ):
-        title = "QND Stability" + r" $|$" + str(self.initial_state) + r"$\rangle$"
+        title = "QND Stability" + " |" + str(self.initial_state) + ">"
         if type is not None:
             title += f", {type}"
         if epsilon is not None:
@@ -180,7 +180,7 @@ class QNDAnalyzer:
             results["times"], results["sigmaz_stabilities"], label="Stability Metric"
         )
         ax.axhline(0, color="red", linestyle="--", label="Initial Sigmaz")
-        ax.set_xlabel(r"Time ($\mu s$)")
+        ax.set_xlabel("Time (μs)")
         ax.set_ylabel("Stability Metric")
 
         if ylim_down is not None and ylim_up is not None:
@@ -206,7 +206,7 @@ class QNDAnalyzer:
         show=True
     ):
         title = (
-            "QND Sigmaz Expectation" + r" $|$" + str(self.initial_state) + r"$\rangle$"
+            "QND Sigmaz Expectation" + " |" + str(self.initial_state) + ">"
         )
         if type is not None:
             title += f", {type}"
@@ -222,7 +222,7 @@ class QNDAnalyzer:
         ax.axhline(
             self.initial_sigmaz, color="red", linestyle="--", label="Initial Sigmaz"
         )
-        ax.set_xlabel(r"Time ($\mu s$)")
+        ax.set_xlabel("Time (μs)")
         ax.set_ylabel("Sigmaz Expectation")
 
         if ylim_down is not None and ylim_up is not None:
