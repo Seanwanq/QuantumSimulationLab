@@ -5,6 +5,7 @@ import quantumsimulationlab.photonanalyzer as qp
 from quantumsimulationlab.wigneranalyzer import WignerAnalyzer
 from quantumsimulationlab.tools import create_directory
 from quantumsimulationlab.system import System
+import matplotlib.pyplot as plt
 
 
 class Twins:
@@ -144,6 +145,19 @@ class Twins:
         create_directory(self.father_directory, self.directory_name)
         create_directory(self.father_directory + "/" + self.directory_name, "data")
         create_directory(self.father_directory + "/" + self.directory_name, "figures")
+    
+    def configure_plot_style(self, fontsize=14):
+        plt.rcParams.update({
+            'font.size': fontsize,
+            'axes.titlesize': fontsize + 2,
+            'axes.labelsize': fontsize,
+            'xtick.labelsize': fontsize - 2,
+            'ytick.labelsize': fontsize - 2,
+            'legend.fontsize': fontsize,
+            'figure.titlesize': fontsize + 4,
+            'lines.linewidth': 2,
+            'lines.markersize': 8
+        })
 
     def run_simulation(self):
         rho_ts = []
@@ -362,3 +376,211 @@ class Twins:
             save_path=self.figures_dir + "wigner_separabilities.png",
             show=self.show
         )
+
+    def replot(self, save_path, fontsize=16):
+        create_directory(save_path, self.directory_name)
+        create_directory(save_path + "/" + self.directory_name, "figures")
+        save_path = save_path + "/" + self.directory_name + "/figures"
+        # Replotting wigner results
+        self.configure_plot_style(fontsize=fontsize)
+        wigner_analyzer = WignerAnalyzer(self.xvec, point_number=30)
+        wigner_results = wigner_analyzer.load_results(self.data_dir + "wigner_results")
+        wigner_times = wigner_results["times"]
+        wigner_list_0 = wigner_results["wigner_list_0"]
+        wigner_list_1 = wigner_results["wigner_list_1"]
+        wigner_overlaps = wigner_results["overlaps"]
+        wigner_separabilities = wigner_results["separabilities"]
+        wigner_peak_traces = [
+            wigner_results["peak_traces_0"],
+            wigner_results["peak_traces_1"],
+        ]
+        wigner_last_0, wigner_last_1, time_last = wigner_analyzer.get_wigner_last(
+            wigner_list_0, wigner_list_1, wigner_times
+        )
+        wigner_analyzer.plot_wigner_together_with_peak_trace(
+            wigner_last_0,
+            wigner_last_1,
+            time_last,
+            [wigner_peak_traces[0], wigner_peak_traces[1]],
+            type=self.coupling_type,
+            epsilon=self.epsilon,
+            A=self.A,
+            wlim=1.00,
+            save_path=save_path + "/wigner_trace_last.png",
+            show=self.show
+        )
+        wigner_analyzer.plot_overlaps(
+            wigner_times,
+            wigner_overlaps,
+            type=self.coupling_type,
+            epsilon=self.epsilon,
+            A=self.A,
+            save_path=save_path + "/wigner_overlaps.png",
+            show=self.show
+        )
+        wigner_analyzer.plot_separabilities(
+            wigner_times,
+            wigner_separabilities,
+            type=self.coupling_type,
+            epsilon=self.epsilon,
+            A=self.A,
+            save_path=save_path + "/wigner_separabilities.png",
+            show=self.show
+        )
+        self.system[0].replot(save_path=save_path)
+        self.system[1].replot(save_path=save_path)
+        self.photon_analysis_replot(save_path=save_path)
+
+    def photon_analysis_replot(self, save_path):
+        photon_lists = []
+        for i in range(0, 2):
+            photon_lists.append(qp.load_photon_data(self.data_dir + f"photon_data_{i}.csv"))
+
+        match self.coupling_type:
+            case "transverse":
+
+                def photon_average_transverse(t):
+                    chi = (self.A * np.cos(self.theta)) ** 2 / (self.delta)
+                    phiqb = 2 * np.arctan(2 * chi / self.kappa)
+                    n = (
+                        (2 * np.abs(self.epsilon) / self.kappa) ** 2
+                        * (np.cos(0.5 * phiqb)) ** 2
+                        * (
+                            1
+                            - 2 * np.cos(chi * t) * np.exp(-0.5 * self.kappa * t)
+                            + np.exp(-self.kappa * t)
+                        )
+                    )
+                    return n
+
+                photon_theoretical = qp.get_photon_data_list(
+                    self.tlist, [photon_average_transverse(t) for t in self.tlist]
+                )
+
+                qp.plot_photon_data_list(
+                    [photon_lists[0], photon_lists[1], photon_theoretical],
+                    linestyles={2: "-."},
+                    labels={
+                        0: "|0>",
+                        1: "|1>",
+                        2: "theory",
+                    },
+                    type=self.coupling_type,
+                    epsilon=self.epsilon,
+                    A=self.A,
+                    save_path=save_path + "/photon_data.png",
+                    show=self.show
+                )
+
+            case "longitudinal":
+                if self.epsilon < 0.001:
+
+                    def photon_average_longitudinal(t):
+                        n = (
+                            (np.abs(self.A * np.sin(self.theta))) ** 2 / self.kappa**2
+                        ) * (1 - np.exp(-0.5 * self.kappa * t)) ** 2
+                        return n
+
+                    def photon_average_longitudinal_fixed(t):
+                        n = (
+                            (4 / np.pi) ** 2
+                            * (
+                                (np.abs(self.A * np.sin(self.theta))) ** 2
+                                / self.kappa**2
+                            )
+                            * (1 - np.exp(-0.5 * self.kappa * t)) ** 2
+                        )
+                        return n
+
+                    photon_theoretical = qp.get_photon_data_list(
+                        self.tlist, [photon_average_longitudinal(t) for t in self.tlist]
+                    )
+
+                    photon_theoretical_fixed = qp.get_photon_data_list(
+                        self.tlist,
+                        [photon_average_longitudinal_fixed(t) for t in self.tlist],
+                    )
+
+                    qp.plot_photon_data_list(
+                        [
+                            photon_lists[0],
+                            photon_lists[1],
+                            photon_theoretical,
+                            photon_theoretical_fixed,
+                        ],
+                        linestyles={2: "-.", 3: "-."},
+                        labels={
+                            0: "|0>",
+                            1: "|1>",
+                            2: "theory",
+                            3: "theory fixed",
+                        },
+                        type=self.coupling_type,
+                        epsilon=self.epsilon,
+                        A=self.A,
+                        save_path=save_path + "/photon_data.png",
+                        show=self.show
+                    )
+
+                else:
+                    qp.plot_photon_data_list(
+                        [photon_lists[0], photon_lists[1]],
+                        labels={
+                            0: "|0>",
+                            1: "|1>",
+                        },
+                        type=self.coupling_type,
+                        epsilon=self.epsilon,
+                        A=self.A,
+                        save_path=save_path + "/photon_data.png",
+                        show=self.show
+                    )
+
+            case "hybrid":
+
+                def photon_average_hybrid(t):
+                    g = self.A * np.sin(self.theta)
+                    a = 4.0 / np.pi
+                    chi = (self.A * np.cos(self.theta)) ** 2 / (self.delta)
+                    phiqb = 2 * np.arctan(2 * chi / self.kappa)
+                    term1 = (
+                        a**2
+                        * (np.abs(g)) ** 2
+                        / self.kappa**2
+                        * (np.cos(0.5 * phiqb)) ** 2
+                        * (1 - np.exp(-0.5 * self.kappa * t)) ** 2
+                    )
+                    term2 = (
+                        (2 * np.abs(self.epsilon) / self.kappa) ** 2
+                        * (np.cos(0.5 * phiqb)) ** 2
+                        * (
+                            1
+                            - 2 * np.cos(chi * t) * np.exp(-0.5 * self.kappa * t)
+                            + np.exp(-self.kappa * t)
+                        )
+                    )
+                    return term1 + term2
+
+                photon_theoretical = qp.get_photon_data_list(
+                    self.tlist, [photon_average_hybrid(t) for t in self.tlist]
+                )
+
+                qp.plot_photon_data_list(
+                    [photon_lists[0], photon_lists[1], photon_theoretical],
+                    linestyles={2: "-."},
+                    labels={
+                        0: "|0>",
+                        1: "|1>",
+                        2: "theory",
+                    },
+                    type=self.coupling_type,
+                    epsilon=self.epsilon,
+                    A=self.A,
+                    save_path=save_path + "/photon_data.png",
+                    show=self.show
+                )
+
+            case _:
+                raise ValueError(
+                    f"Invalid coupling type: {self.coupling_type}. Choose from {['transverse', 'longitudinal', 'hybrid']}."
+                )

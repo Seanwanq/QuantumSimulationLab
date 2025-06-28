@@ -240,3 +240,42 @@ class System:
             ylim_up=1.01 if self.initial_state == 0 else -0.99,
             show=self.show
         )
+
+    def replot(self, save_path):
+        # First load the data to detect the actual dimension used
+        import numpy as np
+        cache_path = self.data_dir + "qnd_results_" + str(self.initial_state) + "_reduced.npz"
+        data = np.load(cache_path, allow_pickle=True)
+        rho_t = data["rho_t"]
+        
+        # Extract actual dim_r from the cached data
+        if len(rho_t) > 0:
+            actual_dims = rho_t[0].dims
+            actual_dim_r = actual_dims[0][1]  # [2, dim_r] -> dim_r
+        else:
+            actual_dim_r = self.dim_r
+        
+        qnd_analyzer = QNDAnalyzer(
+            self.dim_q, actual_dim_r, self.psi_q, self.initial_state
+        )
+        qnd_results_reduced = qnd_analyzer.time_evolution_analysis(rho_t, data["times"])
+        qnd_analyzer.plot_qnd_fidelities(
+            qnd_results_reduced,
+            coupling_type=self.coupling_type,
+            epsilon=self.epsilon,
+            A=self.A,
+            save_path= save_path + "/qnd_fidelities_"
+            + str(self.initial_state)
+            + "_reduced.png",
+            show=self.show
+        )
+        qnd_analyzer.plot_sigmaz_expectations(
+            qnd_results_reduced,
+            type=self.coupling_type,
+            epsilon=self.epsilon,
+            A=self.A,
+            save_path= save_path + f"/qnd_sigmaz_expectations_{self.initial_state}_reduced.png",
+            ylim_down=0.99 if self.initial_state == 0 else -1.01,
+            ylim_up=1.01 if self.initial_state == 0 else -0.99,
+            show=self.show
+        )
