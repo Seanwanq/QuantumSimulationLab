@@ -48,7 +48,7 @@ def load_photon_data(load_path):
 def plot_photon_data_list(
     photon_lists,
     save_path=None,
-    figsize=(10, 8),
+    figsize=(13, 8),
     show_equilibrium=True,
     linestyles=None,
     labels=None,
