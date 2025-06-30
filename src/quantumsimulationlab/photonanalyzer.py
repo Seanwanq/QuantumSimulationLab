@@ -48,7 +48,7 @@ def load_photon_data(load_path):
 def plot_photon_data_list(
     photon_lists,
     save_path=None,
-    figsize=(13, 8),
+    figsize=(10, 8),
     show_equilibrium=True,
     linestyles=None,
     labels=None,
@@ -68,17 +68,21 @@ def plot_photon_data_list(
     else:
         title = "Average Photon Number vs Time"
 
+    title = ""
+
     if type is not None:
-        title += ", "
+        # title += ", "
         title += type
 
     if epsilon is not None:
-        title += ", "
+        # title += ", "
         title += rf"$\epsilon$ = {epsilon} MHz"
 
     if A is not None:
         title += ", "
         title += rf"A = {A} MHz"
+
+    title = ""
 
     ax.set_title(title)
 
